@@ -1,16 +1,23 @@
 package employeefx;
 
 import content.Employee;
+import content.EmployeeFile;
+import java.io.FileNotFoundException;
 import java.util.LinkedList;
+import java.util.Optional;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -20,15 +27,15 @@ import javafx.stage.Stage;
 public class Main extends Application{
 
     
-    private final LinkedList<Employee> employeelist = new LinkedList();
+    private final LinkedList<Employee> employeeList = new LinkedList();
     private final Label lblID = new Label(" ID: ");
     private final TextField txtID = new TextField();
     private final Label lblName = new Label(" Name: ");
     private final TextField txtName = new TextField();
-    private final Label lblcity = new Label(" City: ");
-    private final TextField txtcity = new TextField();
-    private final Label lblpos = new Label(" Position: ");
-    private final TextField txtpos = new TextField();
+    private final Label lblCity = new Label(" City: ");
+    private final TextField txtCity = new TextField();
+    private final Label lblPos = new Label(" Position: ");
+    private final TextField txtPos = new TextField();
     
     private final Button btnFirst = new Button("First");
     private final Button btnNext = new Button("Next");
@@ -42,8 +49,9 @@ public class Main extends Application{
      @Override
     public void start(Stage stage) {
         Scene scene = new Scene(employeePane(), 600, 300);
-       // btnAdd.setOnAction(new AddStudent());
-        //stage.setOnCloseRequest(new EndProgram());
+        
+        btnAdd.setOnAction(new Addrecord());
+        
         stage.setScene(scene);
         stage.show();
     }
@@ -65,10 +73,10 @@ public class Main extends Application{
     grid.add(txtID, 1, 1);
     grid.add(lblName, 2, 1);
     grid.add(txtName, 3, 1);
-    grid.add(lblcity, 0, 2);
-    grid.add(txtcity, 1, 2);
-    grid.add(lblpos, 2, 2);
-    grid.add(txtpos, 3, 2);
+    grid.add(lblCity, 0, 2);
+    grid.add(txtCity, 1, 2);
+    grid.add(lblPos, 2, 2);
+    grid.add(txtPos, 3, 2);
 
     // Add search button below navigation buttons
     HBox searchBox = new HBox(10);
@@ -127,7 +135,95 @@ public class Main extends Application{
 
     return grid;
 }
+   
+   public class Addrecord implements EventHandler<ActionEvent> {
+      
+       @Override
+       
+       public void handle(ActionEvent A){
+         
+        txtID.clear();
+        txtName.clear();
+        txtCity.clear();
+        txtPos.clear();
+        txtID.requestFocus();
+        
+        txtID.setEditable(true);
+        txtName.setEditable(true);
+        txtCity.setEditable(true);
+        txtPos.setEditable(true);
+      
+        btnAdd.setDisable(true);
+        
+       btnUp.setOnAction((e) -> {
+      try{
+    int id = Integer.parseInt(txtID.getText());
+        String name = txtName.getText();
+        String city = txtCity.getText();
+        String  position= txtPos.getText();
+        Employee add = new Employee(id,name,city,position);
+        
+          
+    // Display a confirmation dialog box
+    Alert alert = new Alert(AlertType.CONFIRMATION, "Would you like to add the changes?", ButtonType.OK, ButtonType.CANCEL);
+    Optional<ButtonType> result = alert.showAndWait();
+
+    // If the user clicks "OK", add the new Employee object to the employeeList ArrayList
+    if (result.get() == ButtonType.OK) {
+        int index = employeeList.size();
+        employeeList.add(add);
+         EmployeeFile.saveStatus(employeeList);
+         btnAdd.setDisable(false);
+    }
+       }catch(FileNotFoundException a) {
+                Alert dlgError = new Alert(Alert.AlertType.ERROR);
+                dlgError.setHeaderText("Data not saved - Program Ending");
+                dlgError.show();
+            }
+       
+    
+});
+
+       
+        }
+   }
+   
+  /* public class Updaterecord implements EventHandler<ActionEvent> {
+      
+       @Override
+       
+       public void handle(ActionEvent B){
+         try{
+    int id = Integer.parseInt(txtID.getText());
+        String name = txtName.getText();
+        String city = txtCity.getText();
+        String  position= txtPos.getText();
+        Employee add = new Employee(id,name,city,position);
+        
+          
+    // Display a confirmation dialog box
+    Alert alert = new Alert(AlertType.CONFIRMATION, "Would you like to add the changes?", ButtonType.OK, ButtonType.CANCEL);
+    Optional<ButtonType> result = alert.showAndWait();
+
+    // If the user clicks "OK", add the new Employee object to the employeeList ArrayList
+    if (result.get() == ButtonType.OK) {
+        int index = employeeList.size();
+        employeeList.add(add);
+         EmployeeFile.saveStatus(employeeList);
+         btnAdd.setDisable(false);
+    }
+       }catch(FileNotFoundException a) {
+                Alert dlgError = new Alert(Alert.AlertType.ERROR);
+                dlgError.setHeaderText("Data not saved - Program Ending");
+                dlgError.show();
+            }
+       
+        }
+   }*/
+   
  
+   
+   
     public static void main(String[] args) {
      Application.launch(args);    
     }    
