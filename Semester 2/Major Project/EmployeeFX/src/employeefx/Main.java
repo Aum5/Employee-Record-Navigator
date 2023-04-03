@@ -2,7 +2,10 @@ package employeefx;
 
 import content.Employee;
 import content.EmployeeFile;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Optional;
 import javafx.application.Application;
@@ -67,7 +70,9 @@ public class Main extends Application{
     navButtons.setAlignment(Pos.CENTER);
     navButtons.getChildren().addAll(btnFirst, btnNext, btnpre, btnLast);
     grid.add(navButtons, 0, 0, 4, 1);
-
+    
+    
+    
     // Add labels and text fields
     grid.add(lblID, 0, 1);
     grid.add(txtID, 1, 1);
@@ -132,10 +137,37 @@ public class Main extends Application{
     RowConstraints row4 = new RowConstraints();
     row4.setPrefHeight(50);
     grid.getRowConstraints().add(row4);
+    
+    //CSS
+    
+    lblName.setStyle("-fx-text-fill: red;");
+    lblID.setStyle("-fx-text-fill: red;");
+    lblCity.setStyle("-fx-text-fill: red;");
+    lblPos.setStyle("-fx-text-fill: red;");
+    txtID.setStyle("-fx-background-color: lightblue;");
+    txtName.setStyle("-fx-background-color: lightblue;");
+    txtCity.setStyle("-fx-background-color: lightblue;");
+    txtPos.setStyle("-fx-background-color: lightblue;");
+    btnsearch.setStyle("-fx-background-color:pink;");
+    btnFirst.setStyle("-fx-background-color:greenyellow;");
+    btnLast.setStyle("-fx-background-color:greenyellow;");
+    btnpre.setStyle("-fx-background-color:greenyellow;");
+    btnNext.setStyle("-fx-background-color:greenyellow;");
+    btnAdd.setStyle("-fx-background-color:yellow;");
+    btnDelete.setStyle("-fx-background-color:yellow;");
+    btnUp.setStyle("-fx-background-color:yellow;");
+    
 
     return grid;
 }
-   
+   private void readFirstRecord() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("Employee.dat"))) {
+            String firstRecord = reader.readLine();
+            txtID.setText("First record: " + firstRecord);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
    public class Addrecord implements EventHandler<ActionEvent> {
       
        @Override
@@ -183,7 +215,7 @@ public class Main extends Application{
        
     
 });
-
+       
        
         }
    }
@@ -220,9 +252,6 @@ public class Main extends Application{
        
         }
    }*/
-   
- 
-   
    
     public static void main(String[] args) {
      Application.launch(args);    
