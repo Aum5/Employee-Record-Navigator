@@ -28,8 +28,6 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
 public class Main extends Application{
-
-    
     private final LinkedList<Employee> employeeList = new LinkedList();
     private final Label lblID = new Label(" ID: ");
     private final TextField txtID = new TextField();
@@ -139,7 +137,7 @@ public class Main extends Application{
     grid.getRowConstraints().add(row4);
     
     //CSS
-    
+    //.setStyle("-fx-background-color: lightblue;");
     lblName.setStyle("-fx-text-fill: red;");
     lblID.setStyle("-fx-text-fill: red;");
     lblCity.setStyle("-fx-text-fill: red;");
