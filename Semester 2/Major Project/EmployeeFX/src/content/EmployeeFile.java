@@ -1,18 +1,67 @@
 package content;
-import java.awt.event.ActionEvent;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import javafx.stage.Stage;
-import javax.swing.JFrame;
 
-public class EmployeeFile {
+import employeefx.Main;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.LinkedList;
+import java.util.Optional;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
+
+public class EmployeeFile extends Main{
+    
+    
+    
+    public static class Addrecord implements EventHandler<ActionEvent> {
+      
+       @Override
+       
+       public void handle(ActionEvent A){
+         
+        txtID.clear();
+        txtName.clear();
+        txtCity.clear();
+        txtPos.clear();
+        txtID.requestFocus();
+        
+        txtID.setEditable(true);
+        txtName.setEditable(true);
+        txtCity.setEditable(true);
+        txtPos.setEditable(true);
+      
+        btnAdd.setDisable(true);
+        
+       btnUp.setOnAction((e) -> {
+      try{
+    int id = Integer.parseInt(txtID.getText());
+        String name = txtName.getText();
+        String city = txtCity.getText();
+        String  position= txtPos.getText();
+        Employee add = new Employee(id,name,city,position);
+        
+          
+    // Display a confirmation dialog box
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Would you like to add the changes?", ButtonType.OK, ButtonType.CANCEL);
+    Optional<ButtonType> result = alert.showAndWait();
+
+    // If the user clicks "OK", add the new Employee object to the employeeList ArrayList
+    if (result.get() == ButtonType.OK) {
+        int index = employeeList.size();
+        employeeList.add(add);
+         EmployeeFile.saveStatus(employeeList);
+         btnAdd.setDisable(false);
+    }
+       }catch(FileNotFoundException a) {
+                Alert dlgError = new Alert(Alert.AlertType.ERROR);
+                dlgError.setHeaderText("Data not saved - Program Ending");
+                dlgError.show();
+            } 
+});  
+        }
+   }
 
 
 public static void saveStatus(LinkedList<Employee> employeeList)
@@ -26,76 +75,5 @@ public static void saveStatus(LinkedList<Employee> employeeList)
     }
 
 
-//first 
-//public class EmployeeNavigation extends JFrame {
-//    private ArrayList<Employee> employeeList;
-//    private final int currentIndex;
-//        private Object txtID;
-//    
-//    public EmployeeNavigation() {
-//        super("Employee Navigation");
-//        employeeList = new ArrayList<Employee>();
-//        currentIndex = 0;
-//        loadDataFromFile("Employee.dat");
-//        displayEmployee(currentIndex);
-//    }
-//
-//private void loadDataFromFile(String fileName) {
-//        BufferedReader reader;
-//        try {
-//            reader = new BufferedReader(new FileReader(fileName));
-//            String line = reader.readLine();
-//            while (line != null) {
-//                String[] fields = line.split(" ");
-//                Employee employee = new Employee(fields[0], fields[1], fields[2], fields[3]);
-//                employeeList.add(employee);
-//                line = reader.readLine();
-//            }
-//            reader.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//private void displayEmployee(int index) {
-//        Employee employee = employeeList.get(index);
-//        txtID.setText(employee.getId());
-//        txtName.setText(employee.getName());
-//        txtCity.setText(employee.getCity());
-//        txtPos.setText(employee.getPosition());
-//    }
-//    }
-//}
 
-// NEW FIRST BTN
-//
-//public void start(Stage primaryStage){
-//btnFirst.setOnAction((ActionEvent e) -> {
-//            try {
-//                FileInputStream fis = new FileInputStream("Employee.dat");
-//                DataInputStream dis = new DataInputStream(fis);
-//
-//                int id = dis.readInt();
-//                byte[] nameBytes = new byte[20];
-//                dis.readFully(nameBytes);
-//                String name = new String(nameBytes, "UTF-8").trim();
-//                byte[] cityBytes = new byte[20];
-//                dis.readFully(cityBytes);
-//                String city = new String(cityBytes, "UTF-8").trim();
-//                byte[] positionBytes = new byte[20];
-//                dis.readFully(positionBytes);
-//                String position = new String(positionBytes, "UTF-8").trim();
-//
-//                dis.close();
-//                fis.close();
-//
-//                txtID.setText(Integer.toString(id));
-//                txtName.setText(name);
-//                txtCity.setText(city);
-//                txtPos.setText(position);
-//            } catch (IOException ex) {
-//                ex.printStackTrace();
-//          }
-//  
-//}
-//        }
-}
+    }
